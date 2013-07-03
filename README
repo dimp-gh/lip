@@ -1,0 +1,7 @@
+Minimal Scheme implementation in plain Prolog.
+
+TODO:
+- cons, car, cdr
+- defines
+- standard call-by-value evaluation order
+- tco, if possible
