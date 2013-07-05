@@ -5,3 +5,6 @@ TODO:
 - defines
 - standard call-by-value evaluation order
 - tco, if possible
+- symbols and quotations
+- [ULTRA HARD LEVEL] full R5RS support with macros
+
