@@ -1,3 +1,4 @@
+:- module(gramma, [parse_sexpr/2]).
 /*
  * Basic Lisp grammar and parser. Builds some kind of syntax tree.
  * Main non-terminal: sexpr.
@@ -46,3 +47,5 @@ string_content([C | CS]) --> ascii(C), string_content(CS).
 identifier(Id) --> alpha(Lh), rest_of_id(Ls), { Id = id([Lh | Ls]) }.
 rest_of_id([]) --> [].
 rest_of_id([D | Ds]) --> alnum(D), rest_of_id(Ds).
+
+parse_sexpr(String, Expr) :- sexpr(Expr, String, []).

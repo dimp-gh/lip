@@ -1,11 +1,11 @@
-Minimal Scheme implementation in plain Prolog.
+Experimental Scheme implementation in SWI-Prolog.
 
 TODO:
-- cons, car, cdr
-- defines
-- standard call-by-value evaluation order
-- tco, if possible
-- symbols and quotations
-- good closures
+- [EASY] cons, car, cdr
+- [EASY] defines
+- [EASY] standard call-by-value evaluation order
+- [EASY] tco, if possible
+- [EASY] symbols and quotations
+- [MEDIUM] good closures
+- [HARD LEVEL] call/cc and all that continuations stuff
 - [ULTRA HARD LEVEL] full R5RS support with macros
-

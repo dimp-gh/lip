@@ -1,3 +1,5 @@
+:- module(lisp, []).
+:- use_module(gramma).
 /*
  * Major things to implement are:
  * - Recursive descent parser
