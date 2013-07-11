@@ -34,16 +34,23 @@ term(S) --> sexpr(S).
 term(I) --> identifier(I).
 
 literal(N) --> number(N).
-literal(S) --> string_literal(S).
+literal(S) --> string(S).
+literal(B) --> boolean(B).
+literal(N) --> nil(N).
 
 % TODO: Current implementation thinks that 001 is a valid number. I don't think so. Should be fixed. 
 number(N) --> digits(Cs), { number_codes(Value, Cs), N = number_lit(Value) }.
 digits([D]) --> digit(D).
 digits([D | Ds]) --> digit(D), digits(Ds).
 
-string_literal(Ss) --> [34], string_content(S), [34], { Ss = string_lit(S) }.
+string(Ss) --> [34], string_content(S), [34], { Ss = string_lit(S) }.
 string_content([]) --> [].
 string_content([C | Cs]) --> ascii(C), string_content(Cs).
+
+boolean(boolean_lit(true)) --> "#t".
+boolean(boolean_lit(false)) --> "#f".
+
+nil(nil_lit) --> "#nil".
 
 identifier(Id) --> nondelim(Ih), rest_of_id(Is), { Id = id([Ih | Is]) }.
 rest_of_id([]) --> [].

@@ -8,10 +8,19 @@ test(parse_number) :-
     gramma:number(number_lit(142857), "142857", []), !.
 
 test(parse_empty_string) :-
-    gramma:string_literal(string_lit(""), "\"\"", []), !.
+    gramma:string(string_lit(""), "\"\"", []), !.
 
-test(parse_string_literal) :-
-    gramma:string_literal(string_lit("hello world of strings"), "\"hello world of strings\"", []), !.
+test(parse_string) :-
+    gramma:string(string_lit("hello world of strings"), "\"hello world of strings\"", []), !.
+
+test(parse_boolean_literal_true) :-
+    gramma:boolean(boolean_lit(true), "#t", []), !.
+
+test(parse_boolean_literal_false) :-
+    gramma:boolean(boolean_lit(false), "#f", []), !.
+
+test(parse_nil_literal) :-
+    gramma:nil(nil_lit, "#nil", []).
 
 test(dont_parse_empty_id) :-
     \+ gramma:identifier(id(""), "", []).
