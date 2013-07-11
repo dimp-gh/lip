@@ -15,6 +15,8 @@ ascii(C) --> [C], { code_type(C, ascii) }.
 alpha(C) --> [C], { code_type(C, alpha) }.
 alnum(C) --> [C], { code_type(C, alnum) }.
 
+nondelim(D) --> [D], { not(code_type(D, white)), not(memberchk(D, "()#'")) }.
+
 % whitespace skipping stuff
 optspace   --> [].
 optspace   --> space, optspace.
@@ -42,9 +44,8 @@ string_literal(Ss) --> [34], string_content(S), [34], { Ss = string_lit(S) }.
 string_content([]) --> [].
 string_content([C | Cs]) --> ascii(C), string_content(Cs).
 
-% TODO: identifiers are now C/Pascal-flavoured, this should be refined
-identifier(Id) --> alpha(Lh), rest_of_id(Ls), { Id = id([Lh | Ls]) }.
+identifier(Id) --> nondelim(Ih), rest_of_id(Is), { Id = id([Ih | Is]) }.
 rest_of_id([]) --> [].
-rest_of_id([D | Ds]) --> alnum(D), rest_of_id(Ds).
+rest_of_id([H | T]) --> nondelim(H), rest_of_id(T).
 
 parse_sexpr(String, Expr) :- sexpr(Expr, String, []).
