@@ -36,6 +36,7 @@ term(I) --> identifier(I).
 literal(N) --> number(N).
 literal(S) --> string_literal(S).
 
+% TODO: Current implementation thinks that 001 is a valid number. I don't think so. Should be fixed. 
 number(N) --> digits(Cs), { number_codes(Value, Cs), N = number_lit(Value) }.
 digits([D]) --> digit(D).
 digits([D | Ds]) --> digit(D), digits(Ds).
@@ -48,4 +49,4 @@ identifier(Id) --> nondelim(Ih), rest_of_id(Is), { Id = id([Ih | Is]) }.
 rest_of_id([]) --> [].
 rest_of_id([H | T]) --> nondelim(H), rest_of_id(T).
 
-parse_sexpr(String, Expr) :- sexpr(Expr, String, []).
+parse_sexpr(String, Expr) :- sexpr(Expr, String, []), !.
