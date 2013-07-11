@@ -29,6 +29,7 @@ test(parse_factorial_funcion) :-
     parse_sexpr("(define (fact x) (if (= x 0) 1 (* x (fact (- x 1)))))",
 		_).
 
-%test(skip_whitespace_while_parsing).
+test(skip_whitespace_while_parsing_sexprs) :-
+    parse_sexpr("   (  whitespace  ,  whitespace     everywhere         )       ", sexpression([id("whitespace"), id(","), id("whitespace"), id("everywhere")])).
 
 :- end_tests(gramma).
