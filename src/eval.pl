@@ -34,6 +34,8 @@ eval(id(Name), Result, Environ) :-
     env_get(Environ, Name, Term),
     eval(Term, Result, Environ).
 
+% SPECIAL CONSTRUCTS BEGIN HERE
+
 % If 'Condition' is neiter false nor nil - 'Then'-branch is evaluated.
 % Otherwise 'Else'-branch is evaluated.
 eval(sexpression([id("if"), Condition, Then, _]), Result, Environ) :-
@@ -45,11 +47,21 @@ eval(sexpression([id("if"), Condition, _, Else]), Result, Environ) :-
     false_condition(Value),
     eval(Else, Result, Environ).
 
+% END OF SPECIAL CONSTRUCTS
+
 % evaluating function calls
 eval(sexpression([id(FunName) | Args]), Result, Environ) :-
     not(special_term(FunName)),
     env_get(Environ, FunName, Function),
     apply(Function, Args, Result, Environ).
+
+% applying lambda to arguments
+apply(lambda([id(Param) | Params], Body), [Arg | Args], Result, Environ) :-
+    eval(Arg, Environ, ArgValue),
+    env_put(Environ, Param, ArgValue, NewEnviron),
+    apply(lambda(Params, Body), Args, Result, NewEnviron).
+apply(lambda([], Body), [], Result, Environ) :-
+    eval(Body, Result, Environ).
 
 % applying built-in function to arguments
 apply(builtin(Name), Args, Result, Environ) :-
