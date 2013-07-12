@@ -1,29 +1,36 @@
 :- module(eval, [eval/2]).
 
-/* So, here is my loose evaluation schema:
+% marking all special constructs here:
+% e.g. if, define, cond, lambda,
+special_term("if").
+
+false_condition(nil_lit).
+false_condition(boolean_lit(false)).
+
+/*
+ * So, here is my loose evaluation order:
  */
 
-eval(number_lit(V), number_lit(V)).
-eval(string_lit(S), string_lit(S)).
-eval(boolean_lit(B), boolean_lit(B)).
-eval(nil_lit, nil_lit).
+% literals are evaluated to themselves 
+eval(number_lit(V),  number_lit(V),  _).
+eval(string_lit(S),  string_lit(S),  _).
+eval(boolean_lit(B), boolean_lit(B), _).
+eval(nil_lit,        nil_lit,        _).
 
 % (if (condition) then else)
 % If 'Condition' is neiter false nor nil - 'Then' branch is evaluated. Otherwise 'Else' is evaluated.
-eval(sexpression([id("if"), Condition, Then, _]), Result) :-
-    eval(Condition, Value),
-    not(Value = nil_lit),
-    not(Value = boolean_lit(false)),
-    eval(Then, Result).
-eval(sexpression([id("if"), Condition, _, Else]), Result) :-
-    eval(Condition, Value),
-    Value = nil_lit,
-    eval(Else, Result).
-eval(sexpression([id("if"), Condition, _, Else]), Result) :-
-    eval(Condition, Value),
-    Value = boolean_lit(false),
-    eval(Else, Result).
+eval(sexpression([id("if"), Condition, Then, _]), Result, Environ) :-
+    eval(Condition, Value, Environ),
+    not(false_condition(Value)),
+    eval(Then, Result, Environ).
+eval(sexpression([id("if"), Condition, _, Else]), Result, Environ) :-
+    eval(Condition, Value, Environ),
+    false_condition(Value),
+    eval(Else, Result, Environ).
 
-eval(sexpression([id(FunName) | Args]), Result) :-
-    not(member(FunName, ["if"])),
-    apply(FunName, Args, Result).
+eval(sexpression([id(FunName) | Args]), Result, Environ) :-
+    not(special_term(FunName)),
+    apply(FunName, Args, Result, Environ).
+
+eval(Expr, Result) :-
+    eval(Expr, Result, initial_environ), !.
