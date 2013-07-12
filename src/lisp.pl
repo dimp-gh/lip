@@ -8,6 +8,12 @@
  * - Evaluator of cod
  */
 
+prettify(number_lit(Value), Pretty) :-
+    number_codes(Value, Pretty).
+prettify(string_lit(X), X).
+prettyfy(boolean_lit(true), "#t").
+prettyfy(boolean_lit(false), "#f").
+prettyfy(nil_lit, "#nil").
 
 repl :-
     nl,
@@ -17,5 +23,6 @@ repl :-
     nl,
     parse_sexpr(String, ST),
     eval(ST, Result),
-    write(Result),
+    prettify(Result, Pretty),
+    format("Answer = ~s, (AST = ~w)", [Pretty, Result]),
     repl.
