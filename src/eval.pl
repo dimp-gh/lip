@@ -4,6 +4,7 @@
 % Marking all special constructs here,
 % e.g. if, define, cond, lambda, ..
 special_term("if").
+special_term("lambda").
 
 false_condition(nil_lit).
 false_condition(boolean_lit(false)).
@@ -36,8 +37,7 @@ eval(id(Name), Result, Environ) :-
 
 % SPECIAL CONSTRUCTS BEGIN HERE
 
-% If 'Condition' is neiter false nor nil - 'Then'-branch is evaluated.
-% Otherwise 'Else'-branch is evaluated.
+% Special construct IF
 eval(sexpression([id("if"), Condition, Then, _]), Result, Environ) :-
     eval(Condition, Value, Environ),
     not(false_condition(Value)),
@@ -47,17 +47,28 @@ eval(sexpression([id("if"), Condition, _, Else]), Result, Environ) :-
     false_condition(Value),
     eval(Else, Result, Environ).
 
+% Special construct LAMBDA
+eval(sexpression([id("lambda"), sexpression(Params), Body]), Result, _) :-
+    Result = lambda(Params, Body).
+
 % END OF SPECIAL CONSTRUCTS
 
-% evaluating function calls
+% Evaluating function calls
+% Function is called by its name
 eval(sexpression([id(FunName) | Args]), Result, Environ) :-
     not(special_term(FunName)),
     env_get(Environ, FunName, Function),
     apply(Function, Args, Result, Environ).
 
+% Lambda is applied directly to arguments 
+eval(sexpression([LambdaDecl | Args]), Result, Environ) :-
+    %LambdaDecl = sexpression([id("lambda"), _, _]),
+    eval(LambdaDecl, Lambda, Environ),
+    apply(Lambda, Args, Result, Environ).
+
 % applying lambda to arguments
 apply(lambda([id(Param) | Params], Body), [Arg | Args], Result, Environ) :-
-    eval(Arg, Environ, ArgValue),
+    eval(Arg, ArgValue, Environ),
     env_put(Environ, Param, ArgValue, NewEnviron),
     apply(lambda(Params, Body), Args, Result, NewEnviron).
 apply(lambda([], Body), [], Result, Environ) :-

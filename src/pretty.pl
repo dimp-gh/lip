@@ -19,6 +19,11 @@ print(nil_lit, "#nil").
 
 print(id(Name), Name).
 
+print(lambda(Args, Body), Result) :-
+   print(sexpression(Args), PArgs),
+   print(Body, PBody),
+   format_to_chars("(lambda ~s ~s)", [PArgs, PBody], Result).
+
 print_list([T], Result) :- print(T, Result).
 print_list([H | T], Result) :-
     print_list(T, Rest),
