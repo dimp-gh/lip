@@ -14,7 +14,7 @@ parse_eval_pretty(String, Answer) :-
 
 % tests
 test('function application by function name') :-
-    parse_eval_pretty("(+ 1 2 3 4 5)", "14"), !.
+    parse_eval_pretty("(+ 1 2 3 4 5)", "15"), !.
 
 test('#t is a true condition') :-
     parse_eval_pretty("(if #t 1 0)", "1"), !.
@@ -30,5 +30,9 @@ test('applying lambda directly to its args') :-
 
 test('applying lambda by condition') :-
     parse_eval_pretty("((if #t (lambda (x) (+ x 1)) (lambda (x) (+ x 2))) 3)", "4"), !.
+
+test('using let to create a recursive function') :-
+    X = "(let (fact (lambda (x) (if (= x 0) 1 (* x (fact (- x 1)))))) (fact 5))",
+    parse_eval_pretty(X, "120"), !.
 
 :- end_tests(eval).

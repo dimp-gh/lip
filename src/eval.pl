@@ -51,6 +51,13 @@ eval(sexpression([id("if"), Condition, _, Else]), Result, Environ) :-
 eval(sexpression([id("lambda"), sexpression(Params), Body]), Result, _) :-
     Result = lambda(Params, Body).
 
+% Special construct LET
+eval(sexpression([id("let"), Binding, Body]), Result, Environ) :-
+    Binding = sexpression([id(Name), Expr]),
+    eval(Expr, Value, Environ),
+    env_put(Environ, Name, Value, NewEnviron),
+    eval(Body, Result, NewEnviron).
+
 % END OF SPECIAL CONSTRUCTS
 
 % Evaluating function calls
