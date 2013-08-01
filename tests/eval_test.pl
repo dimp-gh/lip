@@ -39,4 +39,12 @@ test('evaluated block returns result of evaluating last expression') :-
     X = "(block 1 2 3 4 5)",
     parse_eval_pretty(X, "5"), !.
 
+test('transforming defines into lets') :-
+    X = "(block (define x 42) 1 2 x)",
+    parse_eval_pretty(X, "42"), !.
+
+test('more complex defines transforming') :-
+    X = "(block (define fact (lambda (x) (if (= x 0) 1 (* x (fact (- x 1)))))) (fact 5))",
+    parse_eval_pretty(X, "120"), !.
+
 :- end_tests(eval).

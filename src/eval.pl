@@ -60,7 +60,8 @@ eval(sexpression([id("let"), Binding, Body]), Result, Environ) :-
 
 % Special construct BLOCK
 eval(sexpression([id("block") | Rest]), Result, Environ) :-
-    eval(block(Rest), Result, Environ).
+    transform_defines(Rest, Transformed),
+    eval(block(Transformed), Result, Environ).
 
 % END OF SPECIAL CONSTRUCTS
 
@@ -99,3 +100,15 @@ eval_list_of_terms([], [], _).
 eval_list_of_terms([Arg | Args], [Val | Vals], Environ) :-
     eval(Arg, Val, Environ),
     eval_list_of_terms(Args, Vals, Environ).
+
+transform_defines([], []).
+transform_defines([Head | Rest], Result) :-
+    Head = sexpression([id("define"), Name, Expr]),
+    LetBinding = sexpression([Name, Expr]),
+    transform_defines(Rest, Transformed),
+    LetBody = block(Transformed),
+    Let = sexpression([id("let"), LetBinding, LetBody]),
+    Result = [Let].
+transform_defines([X | T1], [X | T2]) :-
+    not(X = sexpression([id("define"), _, _])),
+    transform_defines(T1, T2).
