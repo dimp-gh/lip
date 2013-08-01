@@ -1,4 +1,4 @@
-:- module(lisp, [repl]).
+:- module(lisp, [repl/0, interp/1]).
 :- use_module(gramma).
 :- use_module(eval).
 :- use_module(pretty).
@@ -15,3 +15,9 @@ repl :-
     pretty:print(Result, PrettyResult),
     format("Answer = ~s, (ST = ~w)\n", [PrettyResult, Result]),
     repl.
+
+interp(Filename) :-
+    atom_codes(FileAtom, Filename),
+    read_file_to_codes(FileAtom, Content, []),
+    parse_sexpr(Content, SyntaxTree),
+    eval(SyntaxTree, _).
