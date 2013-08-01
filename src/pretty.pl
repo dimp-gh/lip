@@ -24,6 +24,10 @@ print(lambda(Args, Body), Result) :-
    print(Body, PBody),
    format_to_chars("(lambda ~s ~s)", [PArgs, PBody], Result).
 
+print(block(Exprs), Result) :-
+    print_list(Exprs, PExprs),
+    format_to_chars("(block ~s)", [PExprs], Result).
+
 print_list([T], Result) :- print(T, Result).
 print_list([H | T], Result) :-
     print_list(T, Rest),
