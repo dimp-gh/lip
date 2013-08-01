@@ -1,11 +1,19 @@
-Experimental Scheme implementation in SWI-Prolog.
+Experimental Scheme-like lisp implementation in SWI-Prolog.
+
 
 TODO:
+
 - [EASY] cons, car, cdr
-- [EASY] defines
-- [EASY] standard call-by-value evaluation order
+- [EASY] [DONE] defines
+- [EASY] [DONE] standard call-by-value evaluation order
 - [EASY] tco, if possible
 - [EASY] symbols and quotations
 - [MEDIUM] good closures
 - [HARD LEVEL] call/cc and all that continuations stuff
 - [ULTRA HARD LEVEL] full R5RS support with macros
+
+
+How to use it?
+
+Use provided shell scripts from root directory.
+
