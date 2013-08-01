@@ -24,6 +24,11 @@ print(lambda(Args, Body), Result) :-
    print(Body, PBody),
    format_to_chars("(lambda ~s ~s)", [PArgs, PBody], Result).
 
+print(let(Binding, Expr), Result) :-
+    print(Binding, PBinding),
+    print(Expr, PExpr),
+    format_to_chars("(let ~s ~s)", [PBinding, PExpr], Result).
+
 print(block(Exprs), Result) :-
     print_list(Exprs, PExprs),
     format_to_chars("(block ~s)", [PExprs], Result).

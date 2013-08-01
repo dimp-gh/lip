@@ -53,10 +53,9 @@ eval(sexpression([id("lambda"), sexpression(Params), Body]), Result, _) :-
 
 % Special construct LET
 eval(sexpression([id("let"), Binding, Body]), Result, Environ) :-
-    Binding = sexpression([id(Name), Expr]),
-    eval(Expr, Value, Environ),
-    env_put(Environ, Name, Value, NewEnviron),
-    eval(Body, Result, NewEnviron).
+    Binding = sexpression([id(_), _]),
+    Let = let(Binding, Body),
+    eval(Let, Result, Environ).
 
 % Special construct BLOCK
 eval(sexpression([id("block") | Rest]), Result, Environ) :-
@@ -78,7 +77,16 @@ eval(sexpression([LambdaDecl | Args]), Result, Environ) :-
     eval(LambdaDecl, Lambda, Environ),
     apply(Lambda, Args, Result, Environ).
 
-% evaling block (sequence of expressions)
+% Evaluating let
+eval(let(Binding, Body), Result, Environ) :-
+    pretty:print(let(Binding, Body), Pretty),
+    format("~s\n", [Pretty]),
+    Binding = sexpression([id(Name), Expr]),    
+    eval(Expr, Value, Environ),
+    env_put(Environ, Name, Value, NewEnviron),
+    eval(Body, Result, NewEnviron).
+
+% Evaluating block (sequence of expressions)
 eval(block(Exprs), Result, Environ) :-
     eval_list_of_terms(Exprs, Results, Environ),
     last(Results, Result).
