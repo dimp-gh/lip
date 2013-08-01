@@ -79,8 +79,6 @@ eval(sexpression([LambdaDecl | Args]), Result, Environ) :-
 
 % Evaluating let
 eval(let(Binding, Body), Result, Environ) :-
-    pretty:print(let(Binding, Body), Pretty),
-    format("~s\n", [Pretty]),
     Binding = sexpression([id(Name), Expr]),    
     eval(Expr, Value, Environ),
     env_put(Environ, Name, Value, NewEnviron),
