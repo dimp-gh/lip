@@ -1,6 +1,7 @@
 :- module(builtins, [apply/3, gen_environ/1]).
 :- use_module(library(assoc)).
 :- use_module(library(pairs)).
+:- use_module(pretty).
 
 % Here i'll declare all built-in-language functions, as '+', '-', 'or', 'and'
 
@@ -25,13 +26,20 @@ apply(builtin(=), [H | T], boolean_lit(true)) :-
 apply(builtin(=), [H | T], boolean_lit(false)) :-
     not(repetition(H, T)).
 
+apply(builtin(print), [X], nil_lit) :-
+    pretty:print(X, Repr),
+    format("~s\n", [Repr]).
+apply(builtin(print), [H1, H2 | T], nil_lit) :-
+    pretty:print_list([H1, H2 | T], Repr),
+    format("~s\n", [Repr]).
+
 repetition(_, []).
 repetition(El, [El | T]) :-
     repetition(El, T).
 
 gen_environ(Environ) :-
     pairs_keys_values(Pairs,
-		      ["+", "-", "*", "="],
-		      [builtin(+), builtin(-), builtin(*), builtin(=)]),
+		      ["+", "-", "*", "=", "print"],
+		      [builtin(+), builtin(-), builtin(*), builtin(=), builtin(print)]),
     list_to_assoc(Pairs, Environ).
     
