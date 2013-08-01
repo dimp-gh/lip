@@ -9,7 +9,7 @@
  */ 
 
 % basic building blocks
-space    --> [C], { code_type(C, white) }.
+space    --> [C], { code_type(C, space) }.
 digit(C) --> [C], { code_type(C, digit) }.
 ascii(C) --> [C], { code_type(C, ascii) }.
 alpha(C) --> [C], { code_type(C, alpha) }.
