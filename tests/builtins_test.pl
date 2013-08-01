@@ -21,7 +21,7 @@ test('(= 1 1 1 2)') :-
 	   number_lit(1),
 	   number_lit(2)
 	  ],
-	  boolean_lit(false)).
+	  boolean_lit(false)), !.
 
 test('(= 0 0)') :-
     apply(builtin(=),
