@@ -35,4 +35,8 @@ test('using let to create a recursive function') :-
     X = "(let (fact (lambda (x) (if (= x 0) 1 (* x (fact (- x 1)))))) (fact 5))",
     parse_eval_pretty(X, "120"), !.
 
+test('evaluated block returns result of evaluating last expression') :-
+    X = "(block 1 2 3 4 5)",
+    parse_eval_pretty(X, "5"), !.
+
 :- end_tests(eval).

@@ -58,6 +58,10 @@ eval(sexpression([id("let"), Binding, Body]), Result, Environ) :-
     env_put(Environ, Name, Value, NewEnviron),
     eval(Body, Result, NewEnviron).
 
+% Special construct BLOCK
+eval(sexpression([id("block") | Rest]), Result, Environ) :-
+    eval(block(Rest), Result, Environ).
+
 % END OF SPECIAL CONSTRUCTS
 
 % Evaluating function calls
@@ -72,6 +76,11 @@ eval(sexpression([LambdaDecl | Args]), Result, Environ) :-
     %LambdaDecl = sexpression([id("lambda"), _, _]),
     eval(LambdaDecl, Lambda, Environ),
     apply(Lambda, Args, Result, Environ).
+
+% evaling block (sequence of expressions)
+eval(block(Exprs), Result, Environ) :-
+    eval_list_of_terms(Exprs, Results, Environ),
+    last(Results, Result).
 
 % applying lambda to arguments
 apply(lambda([id(Param) | Params], Body), [Arg | Args], Result, Environ) :-
