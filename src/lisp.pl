@@ -20,4 +20,4 @@ interp(Filename) :-
     atom_codes(FileAtom, Filename),
     read_file_to_codes(FileAtom, Content, []),
     parse_sexpr(Content, SyntaxTree),
-    eval(SyntaxTree, _).
+    eval(SyntaxTree, _), !.
