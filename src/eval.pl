@@ -108,12 +108,15 @@ eval_list_of_terms([Arg | Args], [Val | Vals], Environ) :-
     eval_list_of_terms(Args, Vals, Environ).
 
 transform_defines([], []).
+% transforms '(define x 5) ...' into '(let (x 5) ...)'
 transform_defines([Head | Rest], Result) :-
     Head = sexpression([id("define"), Name, Expr]),
+    Name = id(_),
     LetBinding = sexpression([Name, Expr]),
     transform_defines(Rest, Transformed),
     LetBody = block(Transformed),
-    Let = sexpression([id("let"), LetBinding, LetBody]),
+    Let = let(LetBinding, LetBody),
+    Result = [Let].
     Result = [Let].
 transform_defines([X | T1], [X | T2]) :-
     not(X = sexpression([id("define"), _, _])),
