@@ -78,6 +78,8 @@ eval(sexpression([id("eval"), Thing]), Result, Environ) :-
     eval(Thing, Evald, Environ),
     not(Evald = quote(_)),
     Result = Evald.
+eval(sexpression([id("eval"), quote(Thing)]), Result, Environ) :-
+    eval(Thing, Result, Environ).
 eval(sexpression([id("eval"), Thing]), Result, Environ) :-
     eval(Thing, Evald, Environ),
     Evald = quote(Something),

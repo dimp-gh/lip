@@ -32,6 +32,7 @@ content([T | C]) --> term(T), whitespace, content(C).
 term(L) --> literal(L).
 term(S) --> sexpr(S).
 term(I) --> identifier(I).
+term(I) --> "'", term(T), { I = quote(T) }.
 
 literal(N) --> number(N).
 literal(S) --> string(S).
