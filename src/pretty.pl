@@ -33,6 +33,10 @@ print(block(Exprs), Result) :-
     print_list(Exprs, PExprs),
     format_to_chars("(block ~s)", [PExprs], Result).
 
+print(quote(Thing), Result) :-
+    print(Thing, PThing),
+    format_to_chars("(quote ~s)", [PThing], Result).
+
 print_list([T], Result) :- print(T, Result).
 print_list([H | T], Result) :-
     print_list(T, Rest),

@@ -51,4 +51,12 @@ test('define-function transforming sugar') :-
     X = "(block (define (inc x) (+ x 1)) (inc 5))",
     parse_eval_pretty(X, "6"), !.
 
+test('quotations') :-
+    X = "(quote (+ 1 2))",
+    parse_eval_pretty(X, X), !.
+
+test('evaling quotations') :-
+    X = "(eval (quote (+ 1 2 3)))",
+    parse_eval_pretty(X, "6"), !.
+
 :- end_tests(eval).

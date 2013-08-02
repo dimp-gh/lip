@@ -62,6 +62,22 @@ eval(sexpression([id("block") | Rest]), Result, Environ) :-
     transform_defines(Rest, Transformed),
     eval(block(Transformed), Result, Environ).
 
+% Special construct QUOTE
+eval(sexpression([id("quote"), Thing]), Result, _) :-
+    Result = quote(Thing).
+
+% Special function eval
+% Eval is separated into core function because it should have
+% certain behaviour when evaling quotations
+eval(sexpression([id("eval"), Thing]), Result, Environ) :-
+    eval(Thing, Evald, Environ),
+    not(Evald = quote(_)),
+    Result = Evald.
+eval(sexpression([id("eval"), Thing]), Result, Environ) :-
+    eval(Thing, Evald, Environ),
+    Evald = quote(Something),
+    eval(Something, Result, Environ).
+
 % END OF SPECIAL CONSTRUCTS
 
 % Evaluating function calls
