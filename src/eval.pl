@@ -5,6 +5,10 @@
 % e.g. if, define, cond, lambda, ..
 special_term("if").
 special_term("lambda").
+special_term("let").
+special_term("block").
+special_term("quote").
+special_term("eval").
 
 false_condition(nil_lit).
 false_condition(boolean_lit(false)).
@@ -32,6 +36,7 @@ eval(nil_lit,        nil_lit,        _).
 % Identifiers are evaluated to associated
 % values from current environment
 eval(id(Name), Result, Environ) :-
+    not(special_term(Name)),
     env_get(Environ, Name, Term),
     eval(Term, Result, Environ).
 
