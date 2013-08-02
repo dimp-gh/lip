@@ -47,4 +47,8 @@ test('more complex defines transforming') :-
     X = "(block (define fact (lambda (x) (if (= x 0) 1 (* x (fact (- x 1)))))) (fact 5))",
     parse_eval_pretty(X, "120"), !.
 
+test('define-function transforming sugar') :-
+    X = "(block (define (inc x) (+ x 1)) (inc 5))",
+    parse_eval_pretty(X, "6"), !.
+
 :- end_tests(eval).

@@ -117,6 +117,17 @@ transform_defines([Head | Rest], Result) :-
     LetBody = block(Transformed),
     Let = let(LetBinding, LetBody),
     Result = [Let].
+% transform '(define (inc x) (+ 1 x)) ...'
+% into      '(let (inc (lambda (x) (+ 1 x))) ...)'
+transform_defines([Head | Rest], Result) :-
+    Head = sexpression([id("define"), FunHeader, FunBody]),
+    FunHeader = sexpression([id(FunName) | Args]),
+    FunBody = sexpression(_Expr),
+    Lambda = sexpression([id("lambda"), sexpression(Args), FunBody]),
+    LetBinding = sexpression([id(FunName), Lambda]),
+    transform_defines(Rest, Transformed),
+    LetBody = block(Transformed),
+    Let = let(LetBinding, LetBody),
     Result = [Let].
 transform_defines([X | T1], [X | T2]) :-
     not(X = sexpression([id("define"), _, _])),
