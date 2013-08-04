@@ -23,8 +23,15 @@ optspace   --> space, optspace.
 whitespace --> space.
 whitespace --> space, whitespace.
 
+
+
 % Lisp stuff
-sexpr(Content) --> optspace, "(", optspace, content(Terms), optspace, ")", optspace, { Content = sexpression(Terms) }.
+sexpr(Content) --> optspace, "(", optspace, content(Terms), optspace, ")", optspace,
+    { Content = sexpression(Terms) }.
+
+% curly braces is a sugar for block construct
+sexpr(Content) --> optspace, "{", optspace, content(Terms), optspace, "}", optspace,
+    { Content = sexpression([id("block") | Terms]) }.
 
 content([T]) --> term(T).
 content([T | C]) --> term(T), whitespace, content(C).
