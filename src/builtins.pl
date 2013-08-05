@@ -42,7 +42,9 @@ apply(builtin(cons), [Head, Rest], list_lit([Head | Content])) :-
 
 apply(builtin(car), [list_lit([Head | _])], Head).
 
-apply(builtin(cdr), [list_lit([_ | Rest])], list_lit(Rest)).
+apply(builtin(cdr), [list_lit([_])], nil_lit).
+apply(builtin(cdr), [list_lit([_ | Rest])], list_lit(Rest)) :-
+    not(Rest = []).
 
 repetition(_, []).
 repetition(El, [El | T]) :-

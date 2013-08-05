@@ -78,5 +78,9 @@ test('(cdr (list 1 2))') :-
 	  [list_lit([number_lit(1), number_lit(2)])],
 	  list_lit([number_lit(2)])), !.
 
+test('(cdr (list 1))') :-
+    apply(builtin(cdr),
+	  [list_lit([number_lit(1)])],
+	  nil_lit), !.
 
 :- end_tests(builtins).
