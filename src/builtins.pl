@@ -33,13 +33,24 @@ apply(builtin(print), [H1, H2 | T], nil_lit) :-
     pretty:print_list([H1, H2 | T], Repr),
     format("~s\n", [Repr]).
 
+apply(builtin(list), Values, list_lit(Values)) :-
+    not(Values = []).
+
+apply(builtin(cons), [Head, nil_lit], list_lit([Head])).
+apply(builtin(cons), [Head, Rest], list_lit([Head | Content])) :-
+    Rest = list_lit(Content).
+
+apply(builtin(car), [list_lit([Head | _])], Head).
+
+apply(builtin(cdr), [list_lit([_ | Rest])], list_lit(Rest)).
+
 repetition(_, []).
 repetition(El, [El | T]) :-
     repetition(El, T).
 
 gen_environ(Environ) :-
     pairs_keys_values(Pairs,
-		      ["+", "-", "*", "=", "print"],
-		      [builtin(+), builtin(-), builtin(*), builtin(=), builtin(print)]),
+		      ["+", "-", "*", "=", "print", "list", "cons", "car", "cdr"],
+		      [builtin(+), builtin(-), builtin(*), builtin(=), builtin(print), builtin(list), builtin(cons), builtin(car), builtin(cdr)]),
     list_to_assoc(Pairs, Environ).
     

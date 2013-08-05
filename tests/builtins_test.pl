@@ -58,5 +58,25 @@ test('(* 1 2 3 4 5)') :-
 	  ],
 	  number_lit(120)), !.
 
+test('(list 1 2 3)') :-
+    apply(builtin(list),
+	  [number_lit(1), number_lit(2), number_lit(3)],
+	  list_lit([number_lit(1), number_lit(2), number_lit(3)])), !.
+
+test('(cons 1 #nil)') :-
+    apply(builtin(cons),
+	  [number_lit(1), nil_lit],
+	  list_lit([number_lit(1)])), !.
+
+test('(car (list 1 2))') :-
+    apply(builtin(car),
+	  [list_lit([number_lit(1), number_lit(2)])],
+	  number_lit(1)), !.
+
+test('(cdr (list 1 2))') :-
+    apply(builtin(cdr),
+	  [list_lit([number_lit(1), number_lit(2)])],
+	  list_lit([number_lit(2)])), !.
+
 
 :- end_tests(builtins).

@@ -32,6 +32,7 @@ eval(number_lit(V),  number_lit(V),  _).
 eval(string_lit(S),  string_lit(S),  _).
 eval(boolean_lit(B), boolean_lit(B), _).
 eval(nil_lit,        nil_lit,        _).
+eval(list_lit(X),    list_lit(X),    _).
 
 % Identifiers are evaluated to associated
 % values from current environment
