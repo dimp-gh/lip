@@ -59,4 +59,20 @@ test('evaling quotations') :-
     X = "(eval (quote (+ 1 2 3)))",
     parse_eval_pretty(X, "6"), !.
 
+test('list constructor') :-
+    X = "(list 1 2 3)",
+    parse_eval_pretty(X, "(list 1 2 3)"), !.
+
+test('cons cells') :-
+    X = "(cons 1 (cons 2 (cons 3 #nil)))",
+    parse_eval_pretty(X, "(list 1 2 3)"), !.
+
+test('car list') :-
+    X = "(car (list 1 2 3 4))",
+    parse_eval_pretty(X, "1"), !.
+
+test('cdr list') :-
+    X = "(cdr (list 1 2 3 4))",
+    parse_eval_pretty(X, "(list 2 3 4)"), !.
+
 :- end_tests(eval).
