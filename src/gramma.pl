@@ -45,6 +45,7 @@ literal(N) --> number(N).
 literal(S) --> string(S).
 literal(B) --> boolean(B).
 literal(N) --> nil(N).
+literal(L) --> list(L).
 
 % TODO: Current implementation thinks that 001 is a valid number. I don't think so. Should be fixed. 
 number(N) --> digits(Cs), { number_codes(Value, Cs), N = number_lit(Value) }.
@@ -59,6 +60,8 @@ boolean(boolean_lit(true)) --> "#t".
 boolean(boolean_lit(false)) --> "#f".
 
 nil(nil_lit) --> "#nil".
+
+list(L) --> "[", optspace, content(Terms), optspace, "]", { L = list_lit(Terms) }.
 
 identifier(Id) --> nondelim(Ih), rest_of_id(Is), { Id = id([Ih | Is]) }.
 rest_of_id([]) --> [].

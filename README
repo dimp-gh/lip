@@ -3,11 +3,11 @@ Experimental Scheme-like lisp implementation in SWI-Prolog.
 
 TODO:
 
-- [EASY] cons, car, cdr
+- [EASY] [DONE] cons, car, cdr
 - [EASY] [DONE] defines
 - [EASY] [DONE] standard call-by-value evaluation order
 - [EASY] tco, if possible
-- [EASY] symbols and quotations
+- [EASY] [DONE] symbols and quotations
 - [MEDIUM] good closures
 - [HARD LEVEL] call/cc and all that continuations stuff
 - [ULTRA HARD LEVEL] full R5RS support with macros

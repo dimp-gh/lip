@@ -16,6 +16,9 @@ print(string_lit(Value), Result) :-
 print(boolean_lit(true), "#t").
 print(boolean_lit(false), "#f").
 print(nil_lit, "#nil").
+print(list_lit(Content), Result) :-
+    print_list(Content, PContent),
+    format_to_chars("(list ~s)", [PContent], Result).
 
 print(id(Name), Name).
 
