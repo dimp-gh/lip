@@ -8,12 +8,13 @@ TODO:
 - [EASY] [DONE] standard call-by-value evaluation order
 - [EASY] tco, if possible
 - [EASY] [DONE] symbols and quotations
-- [MEDIUM] good closures
+- [MEDIUM] good (non-broken) closures
+- [MEDIUM] ability to run all examples and exercises from SICP as is (or maybe with small corrections)
 - [HARD LEVEL] call/cc and all that continuations stuff
-- [ULTRA HARD LEVEL] full R5RS support with macros
+- [ULTRA HARD LEVEL] hygienic macros
 
 
 How to use it?
 
-Use provided shell scripts from root directory.
-
+Use provided shell scripts from root directory, `./run_repl.sh` and `./run_file.sh`.
+Examples of valid code are provided in `examples` directory.
