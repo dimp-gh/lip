@@ -19,5 +19,5 @@ repl :-
 interp(Filename) :-
     atom_codes(FileAtom, Filename),
     read_file_to_codes(FileAtom, Content, []),
-    parse_sexpr(Content, SyntaxTree),
+    parse_module(Content, SyntaxTree),
     eval(SyntaxTree, _), !.

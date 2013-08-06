@@ -1,4 +1,4 @@
-:- module(gramma, [parse_sexpr/2]).
+:- module(gramma, [parse_sexpr/2, parse_repl/2, parse_module/2]).
 /*
  * Basic Lisp grammar and parser. Builds some kind of syntax tree.
  * Main non-terminal: sexpr.
@@ -65,5 +65,10 @@ rest_of_id([]) --> [].
 rest_of_id([H | T]) --> nondelim(H), rest_of_id(T).
 
 repl_input(T) --> optspace, term(T), optspace.
+
+module(M) --> sexpr(B), { M = sexpression([id("block"), B]) }.
+module(M) --> sexpr(B), module(Rest), { Rest = sexpression([id("block") | Block]), M = sexpression([id("block"), B | Block]) }.
+
 parse_sexpr(String, Expr) :- sexpr(Expr, String, []), !.
 parse_repl(String, Expr) :- repl_input(Expr, String, []), !.
+parse_module(String, Expr) :- module(Expr, String, []), !.
