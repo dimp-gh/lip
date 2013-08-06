@@ -64,4 +64,6 @@ identifier(Id) --> nondelim(Ih), rest_of_id(Is), { Id = id([Ih | Is]) }.
 rest_of_id([]) --> [].
 rest_of_id([H | T]) --> nondelim(H), rest_of_id(T).
 
+repl_input(T) --> optspace, term(T), optspace.
 parse_sexpr(String, Expr) :- sexpr(Expr, String, []), !.
+parse_repl(String, Expr) :- repl_input(Expr, String, []), !.
