@@ -41,6 +41,7 @@ eval(id(Name), Result, Environ) :-
     env_get(Environ, Name, Term),
     eval(Term, Result, Environ).
 
+% Case when identifier isn't in current scope
 eval(id(Name), _, Environ) :-
     not(special_term(Name)),
     not(env_get(Environ, Name, _)),
@@ -58,16 +59,34 @@ eval(sexpression([id("if"), Condition, _, Else]), Result, Environ) :-
     eval(Condition, Value, Environ),
     false_condition(Value),
     eval(Else, Result, Environ).
+% Case when `if` doesn't get its three required arguments
+eval(sexpression([id("if") | Args]), _, _) :-
+    length(Args, ArgCount),
+    ArgCount \= 3,
+    format_to_chars("'if' must have exactly three arguments: condition, true-branch and false-branch", [], ErrorMsg),
+    throw(error(ErrorMsg)).
 
 % Special construct LAMBDA
 eval(sexpression([id("lambda"), sexpression(Params), Body]), Result, _) :-
     Result = lambda(Params, Body).
+% Case when `lambda` doesn't get its two arguments
+eval(sexpression([id("lambda") | Args]), _, _) :-
+    length(Args, ArgCount),
+    ArgCount \= 2,
+    format_to_chars("'lambda' must have exactly two arguments: argument list and body", [], ErrorMsg),
+    throw(error(ErrorMsg)).
 
 % Special construct LET
 eval(sexpression([id("let"), Binding, Body]), Result, Environ) :-
     Binding = sexpression([id(_), _]),
     Let = let(Binding, Body),
     eval(Let, Result, Environ).
+% Case when `let` doesn't get its arguments
+eval(sexpression([id("let") | Args]), _, _) :-
+    length(Args, ArgCount),
+    ArgCount \= 2,
+    format_to_chars("'let' must have exactly two arguments: argument list and body", [], ErrorMsg),
+    throw(error(ErrorMsg)).
 
 % Special construct BLOCK
 eval(sexpression([id("block") | Rest]), Result, Environ) :-
@@ -77,6 +96,12 @@ eval(sexpression([id("block") | Rest]), Result, Environ) :-
 % Special construct QUOTE
 eval(sexpression([id("quote"), Thing]), Result, _) :-
     Result = quote(Thing).
+% Case when `quote` doesn't get one argument
+eval(sexpression([id("quote") | Rest]), _, _) :-
+    length(Rest, ArgCount),
+    ArgCount \= 1,
+    format_to_chars("'quote' must have exactly one thing to quote", [], ErrorMsg),
+    throw(error(ErrorMsg)).
 
 % Special function eval
 % Eval is separated into core function because it should have
@@ -91,6 +116,12 @@ eval(sexpression([id("eval"), Thing]), Result, Environ) :-
     eval(Thing, Evald, Environ),
     Evald = quote(Something),
     eval(Something, Result, Environ).
+% Case when `eval` gets wrong number of args
+eval(sexpression([id("eval") | Rest]), _, _) :-
+    length(Rest, ArgCount),
+    ArgCount \= 1,
+    format_to_chars("'eval' must have exactly one argument", [], ErrorMsg),
+    throw(error(ErrorMsg)).
 
 % END OF SPECIAL CONSTRUCTS
 
@@ -167,3 +198,4 @@ eval_safe(Term, Result) :-
     catch(eval(Term, Result),
 	  error(Message),
 	  (Result = nil_lit, format("Evaluation error: ~s\n", [Message]))).
+      % TODO: Fix ^ that. Error should not evaluate to nil. 
