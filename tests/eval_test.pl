@@ -75,4 +75,8 @@ test('cdr list') :-
     X = "(cdr (list 1 2 3 4))",
     parse_eval_pretty(X, "(list 2 3 4)").
 
+test('eval read') :-
+    X = "(eval (read \"(+ 1 2)\"))",
+    parse_eval_pretty(X, "3").
+
 :- end_tests(eval).

@@ -115,14 +115,18 @@ eval(sexpression([id("quote") | Rest]), _, _) :-
 % certain behaviour when evaling quotations
 eval(sexpression([id("eval"), Thing]), Result, Environ) :-
     eval(Thing, Evald, Environ),
-    not(Evald = quote(_)),
-    Result = Evald.
-eval(sexpression([id("eval"), quote(Thing)]), Result, Environ) :-
-    eval(Thing, Result, Environ).
+    Evald = sexpression(_),
+    eval(Evald, Result, Environ).
 eval(sexpression([id("eval"), Thing]), Result, Environ) :-
     eval(Thing, Evald, Environ),
     Evald = quote(Something),
     eval(Something, Result, Environ).
+eval(sexpression([id("eval"), Thing]), Result, Environ) :-
+    eval(Thing, Evald, Environ),
+    Result = Evald.
+eval(sexpression([id("eval"), quote(Thing)]), Result, Environ) :-
+    eval(Thing, Result, Environ).
+
 % Case when `eval` gets wrong number of args
 eval(sexpression([id("eval") | Rest]), _, _) :-
     length(Rest, ArgCount),

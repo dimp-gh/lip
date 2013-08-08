@@ -83,4 +83,10 @@ test('(cdr (list 1))') :-
 	  [list_lit([number_lit(1)])],
 	  nil_lit), !.
 
+test('(read "(+ 1 2)")') :-
+    apply(builtin(read),
+	  [string_lit("(+ 1 2)")],
+	  sexpression([id("+"), number_lit(1), number_lit(2)])), !.
+
+
 :- end_tests(builtins).

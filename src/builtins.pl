@@ -2,6 +2,7 @@
 :- use_module(library(assoc)).
 :- use_module(library(pairs)).
 :- use_module(pretty).
+:- use_module(gramma).
 
 % Here i'll declare all built-in-language functions, as '+', '-', 'or', 'and'
 
@@ -33,6 +34,9 @@ apply(builtin(print), [H1, H2 | T], nil_lit) :-
     pretty:print_list([H1, H2 | T], Repr),
     format("~s\n", [Repr]).
 
+apply(builtin(read), [string_lit(Text)], Result) :-
+    gramma:parse_repl(Text, Result).
+
 apply(builtin(list), Values, list_lit(Values)) :-
     not(Values = []).
 
@@ -52,7 +56,7 @@ repetition(El, [El | T]) :-
 
 gen_environ(Environ) :-
     pairs_keys_values(Pairs,
-		      ["+", "-", "*", "=", "print", "list", "cons", "car", "cdr"],
-		      [builtin(+), builtin(-), builtin(*), builtin(=), builtin(print), builtin(list), builtin(cons), builtin(car), builtin(cdr)]),
+		      ["+", "-", "*", "=", "print", "read", "list", "cons", "car", "cdr"],
+		      [builtin(+), builtin(-), builtin(*), builtin(=), builtin(print), builtin(read), builtin(list), builtin(cons), builtin(car), builtin(cdr)]),
     list_to_assoc(Pairs, Environ).
     
