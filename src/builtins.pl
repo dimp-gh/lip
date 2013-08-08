@@ -37,6 +37,13 @@ apply(builtin(print), [H1, H2 | T], nil_lit) :-
 apply(builtin(read), [string_lit(Text)], Result) :-
     gramma:parse_repl(Text, Result).
 
+apply(builtin(input), [], Result) :-
+    apply(builtin(input), [string_lit("> ")], Result).
+apply(builtin(input), [string_lit(Prompt)], Result) :-
+    format(Prompt),
+    read_line_to_codes(user_input, String),
+    Result = string_lit(String).
+
 apply(builtin(list), Values, list_lit(Values)) :-
     not(Values = []).
 
@@ -56,7 +63,7 @@ repetition(El, [El | T]) :-
 
 gen_environ(Environ) :-
     pairs_keys_values(Pairs,
-		      ["+", "-", "*", "=", "print", "read", "list", "cons", "car", "cdr"],
-		      [builtin(+), builtin(-), builtin(*), builtin(=), builtin(print), builtin(read), builtin(list), builtin(cons), builtin(car), builtin(cdr)]),
+		      ["+", "-", "*", "=", "print", "read", "input", "list", "cons", "car", "cdr"],
+		      [builtin(+), builtin(-), builtin(*), builtin(=), builtin(print), builtin(read), builtin(input), builtin(list), builtin(cons), builtin(car), builtin(cdr)]),
     list_to_assoc(Pairs, Environ).
     
