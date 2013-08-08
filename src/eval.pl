@@ -1,4 +1,4 @@
-:- module(eval, [eval/2]).
+:- module(eval, [eval/2, eval_safe/2]).
 :- use_module(builtins).
 
 % Marking all special constructs here,
@@ -37,9 +37,15 @@ eval(list_lit(X),    list_lit(X),    _).
 % Identifiers are evaluated to associated
 % values from current environment
 eval(id(Name), Result, Environ) :-
-    not(special_term(Name)),
+    not(special_term(Name)), % TODO: not builtin check
     env_get(Environ, Name, Term),
     eval(Term, Result, Environ).
+
+eval(id(Name), _, Environ) :-
+    not(special_term(Name)),
+    not(env_get(Environ, Name, _)),
+    format_to_chars("Unknown identifier ~s", [Name], ErrorMsg),
+    throw(error(ErrorMsg)).
 
 % SPECIAL CONSTRUCTS BEGIN HERE
 
@@ -156,3 +162,8 @@ transform_defines([Head | Rest], Result) :-
 transform_defines([X | T1], [X | T2]) :-
     not(X = sexpression([id("define"), _, _])),
     transform_defines(T1, T2).
+
+eval_safe(Term, Result) :-
+    catch(eval(Term, Result),
+	  error(Message),
+	  (Result = nil_lit, format("Evaluation error: ~s\n", [Message]))).
