@@ -21,7 +21,7 @@ env_get(Environ, Name, Value) :-
 
 eval(Term, Result) :-
     builtins:gen_environ(Environ),
-    eval(Term, Result, Environ).
+    eval(Term, Result, Environ), !.
 
 /*
  * So, here is my loose evaluation order:
