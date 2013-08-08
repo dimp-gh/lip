@@ -63,18 +63,24 @@ eval(sexpression([id("if"), Condition, _, Else]), Result, Environ) :-
 eval(sexpression([id("if") | Args]), _, _) :-
     length(Args, ArgCount),
     ArgCount \= 3,
-    format_to_chars("'if' must have exactly three arguments: condition, true-branch and false-branch", [], ErrorMsg),
-    throw(error(ErrorMsg)).
+    throw(error("'if' must have exactly three arguments: condition, true-branch and false-branch")).
 
 % Special construct LAMBDA
 eval(sexpression([id("lambda"), sexpression(Params), Body]), Result, _) :-
     Result = lambda(Params, Body).
+% Case when lambda gets bad argument list
+eval(sexpression([id("lambda"), Params, _]), _, _) :-
+    not(Params = sexpression(_)),
+    throw(error("'lambda' argument list should be list")).
+% Case when lambda argument list contains non-identifiers
+eval(sexpression([id("lambda"), sexpression(Params), _]), _, _) :-
+    not(forall(member(Param, Params), Param = id(_))),
+    throw(error("'lambda' argument list should contain only identifiers")).
 % Case when `lambda` doesn't get its two arguments
 eval(sexpression([id("lambda") | Args]), _, _) :-
     length(Args, ArgCount),
     ArgCount \= 2,
-    format_to_chars("'lambda' must have exactly two arguments: argument list and body", [], ErrorMsg),
-    throw(error(ErrorMsg)).
+    throw(error("'lambda' must have exactly two arguments: argument list and body")).
 
 % Special construct LET
 eval(sexpression([id("let"), Binding, Body]), Result, Environ) :-
@@ -85,13 +91,14 @@ eval(sexpression([id("let"), Binding, Body]), Result, Environ) :-
 eval(sexpression([id("let") | Args]), _, _) :-
     length(Args, ArgCount),
     ArgCount \= 2,
-    format_to_chars("'let' must have exactly two arguments: argument list and body", [], ErrorMsg),
-    throw(error(ErrorMsg)).
+    throw(error("'let' must have exactly two arguments: argument list and body")).
 
 % Special construct BLOCK
 eval(sexpression([id("block") | Rest]), Result, Environ) :-
     transform_defines(Rest, Transformed),
     eval(block(Transformed), Result, Environ).
+eval(sexpression([id("block")]), _, _) :-
+    throw(error("cannot evaluate empty block")).
 
 % Special construct QUOTE
 eval(sexpression([id("quote"), Thing]), Result, _) :-
