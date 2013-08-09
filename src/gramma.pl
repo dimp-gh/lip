@@ -24,7 +24,6 @@ whitespace --> space.
 whitespace --> space, whitespace.
 
 
-
 % Lisp stuff
 sexpr(Content) --> optspace, "(", optspace, content(Terms), optspace, ")", optspace,
     { Content = sexpression(Terms) }.
@@ -48,7 +47,18 @@ literal(N) --> nil(N).
 literal(L) --> list(L).
 
 % TODO: Current implementation thinks that 001 is a valid number. I don't think so. Should be fixed. 
-number(N) --> digits(Cs), { number_codes(Value, Cs), N = number_lit(Value) }.
+number(D) --> decimal(D).
+number(F) --> float(F).
+
+decimal(N) --> digits(Cs), { number_codes(Value, Cs), N = number_lit(Value) }.
+
+float(F) --> digits(Before), ".", digits(After), {
+		 append(Before, ".", WithPoint),
+		 append(WithPoint, After, Cs),
+		 number_codes(Value, Cs),
+	         F = number_lit(Value)
+	     }.
+
 digits([D]) --> digit(D).
 digits([D | Ds]) --> digit(D), digits(Ds).
 

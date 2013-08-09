@@ -7,6 +7,9 @@ test(parse_zero) :-
 test(parse_number) :-
     gramma:number(number_lit(142857), "142857", []), !.
 
+test(parse_float_number) :-
+    gramma:number(number_lit(3.14), "3.14", []), !.
+
 test(parse_empty_string) :-
     gramma:string(string_lit(""), "\"\"", []), !.
 
