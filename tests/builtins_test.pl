@@ -96,5 +96,11 @@ test('(read "(+ 1 2)")') :-
 	  [string_lit("(+ 1 2)")],
 	  sexpression([id("+"), number_lit(1), number_lit(2)])), !.
 
+test('(< 3 5 7)') :-
+    apply(builtin(<),
+	  [number_lit(3),
+	   number_lit(5),
+	   number_lit(7)],
+	  boolean_lit(true)), !.
 
 :- end_tests(builtins).
