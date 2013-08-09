@@ -5,7 +5,7 @@
 
 % useful routines
 parse_eval(String, Result) :-
-    gramma:parse_sexpr(String, SyntaxTree),
+    gramma:parse_repl(String, SyntaxTree),
     eval:eval_safe(SyntaxTree, Result).
 
 parse_eval_pretty(String, Answer) :-

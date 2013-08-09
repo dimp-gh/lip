@@ -51,7 +51,8 @@ eval(id(Name), _, Environ) :-
 
 % SPECIAL CONSTRUCTS BEGIN HERE
 
-% TODO: move special constructors (if, cond, lambda, block, let) to desugaring part
+% TODO: move special constructors (if, cond, lambda, block, let etc) and transform_defines
+% to desugaring part
 
 % Special construct IF
 eval(sexpression([id("if"), Condition, Then, _]), Result, Environ) :-

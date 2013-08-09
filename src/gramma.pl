@@ -25,11 +25,11 @@ whitespace --> space, whitespace.
 
 
 % Lisp stuff
-sexpr(Content) --> optspace, "(", optspace, content(Terms), optspace, ")", optspace,
+sexpr(Content) --> "(", optspace, content(Terms), optspace, ")",
     { Content = sexpression(Terms) }.
 
 % curly braces is a sugar for block construct
-sexpr(Content) --> optspace, "{", optspace, content(Terms), optspace, "}", optspace,
+sexpr(Content) --> "{", optspace, content(Terms), optspace, "}",
     { Content = sexpression([id("block") | Terms]) }.
 
 content([T]) --> term(T).
@@ -62,7 +62,7 @@ float(F) --> digits(Before), ".", digits(After), {
 digits([D]) --> digit(D).
 digits([D | Ds]) --> digit(D), digits(Ds).
 
-string(Ss) --> [34], string_content(S), [34], { Ss = string_lit(S) }.
+string(Ss) --> "\"", string_content(S), "\"", { Ss = string_lit(S) }.
 string_content([]) --> [].
 string_content([C | Cs]) --> ascii(C), string_content(Cs).
 
@@ -79,8 +79,8 @@ rest_of_id([H | T]) --> nondelim(H), rest_of_id(T).
 
 repl_input(T) --> optspace, term(T), optspace.
 
-module(M) --> sexpr(B), { M = sexpression([id("block"), B]) }.
-module(M) --> sexpr(B), module(Rest), { Rest = sexpression([id("block") | Block]), M = sexpression([id("block"), B | Block]) }.
+module(M) --> optspace, sexpr(B), optspace, { M = sexpression([id("block"), B]) }.
+module(M) --> optspace, sexpr(B), module(Rest), { Rest = sexpression([id("block") | Block]), M = sexpression([id("block"), B | Block]) }.
 
 parse_sexpr(String, Expr) :- sexpr(Expr, String, []), !.
 parse_repl(String, Expr) :- repl_input(Expr, String, []), !.

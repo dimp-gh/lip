@@ -35,13 +35,13 @@ test(parse_haskell_style_id) :-
     gramma:identifier(id("<+>"), "<+>", []), !.
 
 test(parse_trivial_sexpression) :-
-    parse_sexpr("(quack)", sexpression([id("quack")])).
+    parse_repl("(quack)", sexpression([id("quack")])).
 
 test(parse_factorial_funcion) :-
-    parse_sexpr("(define (fact x) (if (= x 0) 1 (* x (fact (- x 1)))))",
+    parse_repl("(define (fact x) (if (= x 0) 1 (* x (fact (- x 1)))))",
 		_).
 
 test(skip_whitespace_while_parsing_sexprs) :-
-    parse_sexpr("   (  whitespace  ,  whitespace     everywhere         )       ", sexpression([id("whitespace"), id(","), id("whitespace"), id("everywhere")])).
+    parse_repl("   (  whitespace  ,  whitespace     everywhere         )       ", sexpression([id("whitespace"), id(","), id("whitespace"), id("everywhere")])).
 
 :- end_tests(gramma).

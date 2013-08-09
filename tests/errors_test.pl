@@ -5,7 +5,7 @@
 
 % useful routines
 parse_eval_catch(String) :-
-    gramma:parse_sexpr(String, SyntaxTree),
+    gramma:parse_repl(String, SyntaxTree),
     catch(eval:eval(SyntaxTree, _), error(_), true).
 
 % tests
