@@ -55,14 +55,11 @@ eval(id(Name), _, Environ) :-
 % to desugaring part
 
 % Special construct IF
-eval(sexpression([id("if"), Condition, Then, _]), Result, Environ) :-
+eval(sexpression([id("if"), Condition, Then, Else]), Result, Environ) :-
     eval(Condition, Value, Environ),
-    not(false_condition(Value)),
-    eval(Then, Result, Environ).
-eval(sexpression([id("if"), Condition, _, Else]), Result, Environ) :-
-    eval(Condition, Value, Environ),
-    false_condition(Value),
-    eval(Else, Result, Environ).
+    false_condition(Value) ->
+	eval(Else, Result, Environ) ;
+        eval(Then, Result, Environ).
 % Case when `if` doesn't get its three required arguments
 eval(sexpression([id("if") | Args]), _, _) :-
     length(Args, ArgCount),
