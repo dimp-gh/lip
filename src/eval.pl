@@ -46,7 +46,7 @@ eval(id(Name), Result, Environ) :-
 eval(id(Name), _, Environ) :-
     not(special_term(Name)),
     not(env_get(Environ, Name, _)),
-    format_to_chars("Unknown identifier ~s", [Name], ErrorMsg),
+    format_to_chars("Unknown identifier '~s'", [Name], ErrorMsg),
     throw(error(ErrorMsg)).
 
 % SPECIAL CONSTRUCTS BEGIN HERE
@@ -57,9 +57,9 @@ eval(id(Name), _, Environ) :-
 % Special construct IF
 eval(sexpression([id("if"), Condition, Then, Else]), Result, Environ) :-
     eval(Condition, Value, Environ),
-    false_condition(Value) ->
+    (false_condition(Value) ->
 	eval(Else, Result, Environ) ;
-        eval(Then, Result, Environ).
+        eval(Then, Result, Environ)).
 % Case when `if` doesn't get its three required arguments
 eval(sexpression([id("if") | Args]), _, _) :-
     length(Args, ArgCount),
