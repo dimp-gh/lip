@@ -36,4 +36,7 @@ test('quoting multiple things') :-
 test('eval multiple things') :-
     parse_eval_catch("(eval (quote 1) (quote 2))").
 
+test('cond without else') :-
+    parse_eval_catch("(cond (#f 0) (#nil 1) (#f 2))").
+
 :- end_tests(errors).

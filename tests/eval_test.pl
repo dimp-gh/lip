@@ -79,4 +79,12 @@ test('eval read') :-
     X = "(eval (read \"(+ 1 2)\"))",
     parse_eval_pretty(X, "3").
 
+test('simple cond') :-
+    X = "(cond (#f 0) (#t 1))",
+    parse_eval_pretty(X, "1").
+
+test('cond else') :-
+    X = "(cond (#f 0) (#nil 1) (else 2))",
+    parse_eval_pretty(X, "2").
+
 :- end_tests(eval).

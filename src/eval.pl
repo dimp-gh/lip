@@ -9,6 +9,7 @@ special_term("let").
 special_term("block").
 special_term("quote").
 special_term("eval").
+special_term("else").
 
 false_condition(nil_lit).
 false_condition(boolean_lit(false)).
@@ -50,6 +51,8 @@ eval(id(Name), _, Environ) :-
 
 % SPECIAL CONSTRUCTS BEGIN HERE
 
+% TODO: move special constructors (if, cond, lambda, block, let) to desugaring part
+
 % Special construct IF
 eval(sexpression([id("if"), Condition, Then, _]), Result, Environ) :-
     eval(Condition, Value, Environ),
@@ -64,6 +67,11 @@ eval(sexpression([id("if") | Args]), _, _) :-
     length(Args, ArgCount),
     ArgCount \= 3,
     throw(error("'if' must have exactly three arguments: condition, true-branch and false-branch")).
+
+% Special construct COND
+eval(sexpression([id("cond") | Branches]), Result, Environ) :-
+    select_branch(Branches, Expr, Environ),
+    eval(Expr, Result, Environ).
 
 % Special construct LAMBDA
 eval(sexpression([id("lambda"), sexpression(Params), Body]), Result, _) :-
@@ -204,6 +212,14 @@ transform_defines([Head | Rest], Result) :-
 transform_defines([X | T1], [X | T2]) :-
     not(X = sexpression([id("define"), _, _])),
     transform_defines(T1, T2).
+
+select_branch([], _, _) :-
+    throw(error("No condition evaluated to #t and no else branch")).
+select_branch([sexpression([id("else"), Winner])], Winner, _).
+select_branch([sexpression([Condition, Expr]) | Rest], Winner, Environ) :-
+    eval(Condition, Result, Environ),
+    false_condition(Result) ->
+	select_branch(Rest, Winner, Environ) ; Winner = Expr.
 
 eval_safe(Term, Result) :-
     catch(eval(Term, Result),
