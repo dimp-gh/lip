@@ -58,6 +58,14 @@ test('(* 1 2 3 4 5)') :-
 	  ],
 	  number_lit(120)), !.
 
+test('(/ 30 3)') :-
+    apply(builtin(/),
+	  [
+	      number_lit(30),
+	      number_lit(3)
+	  ],
+	  number_lit(10)), !.
+
 test('(list 1 2 3)') :-
     apply(builtin(list),
 	  [number_lit(1), number_lit(2), number_lit(3)],

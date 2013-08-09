@@ -22,6 +22,11 @@ apply(builtin(*), [number_lit(Arg) | Args], number_lit(Value)) :-
     apply(builtin(*), Args, number_lit(Product)),
     Value is Arg * Product.
 
+apply(builtin(/), [X], X) :- X = number_lit(_).
+apply(builtin(/), [number_lit(Arg) | Args], number_lit(Value)) :-
+    apply(builtin(/), Args, number_lit(Product)),
+    Value is Arg / Product.
+
 apply(builtin(=), [H | T], boolean_lit(true)) :-
     repetition(H, T).
 apply(builtin(=), [H | T], boolean_lit(false)) :-
@@ -63,7 +68,7 @@ repetition(El, [El | T]) :-
 
 gen_environ(Environ) :-
     pairs_keys_values(Pairs,
-		      ["+", "-", "*", "=", "print", "read", "input", "list", "cons", "car", "cdr"],
-		      [builtin(+), builtin(-), builtin(*), builtin(=), builtin(print), builtin(read), builtin(input), builtin(list), builtin(cons), builtin(car), builtin(cdr)]),
+		      ["+", "-", "*", "/", "=", "print", "read", "input", "list", "cons", "car", "cdr"],
+		      [builtin(+), builtin(-), builtin(*), builtin(/), builtin(=), builtin(print), builtin(read), builtin(input), builtin(list), builtin(cons), builtin(car), builtin(cdr)]),
     list_to_assoc(Pairs, Environ).
     
