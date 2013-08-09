@@ -15,7 +15,11 @@ ascii(C) --> [C], { code_type(C, ascii) }.
 alpha(C) --> [C], { code_type(C, alpha) }.
 alnum(C) --> [C], { code_type(C, alnum) }.
 
-nondelim(D) --> [D], { not(code_type(D, white)), not(memberchk(D, "()#'")) }.
+nondelim(D) --> [D], {
+		    not(code_type(D, white)),
+		    not(code_type(D, space)),
+		    not(memberchk(D, "{}[]()#'"))
+		}.
 
 % whitespace skipping stuff
 optspace   --> [].
