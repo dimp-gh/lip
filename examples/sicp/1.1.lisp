@@ -47,22 +47,3 @@
   (if (= x 0)
       0
     y))
-
-(define (sqrt-iter guess e)
-  (if (good-enough? guess e)
-      guess
-    (sqrt-iter (improve guess e) e)))
-
-(define (average x y)
-  (/ (+ x y) 2))
-
-(define (improve guess e)
-  (average guess (/ e guess)))
-
-(define (good-enough? guess q)
-  (< (abs (- (square guess) q)) 0.001))
-
-(define (sqrt x)
-  (sqrt-iter 1.0 x))
-
-(print "sqrt of 15 is " (sqrt 15))
