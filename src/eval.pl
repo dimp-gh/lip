@@ -1,5 +1,6 @@
 :- module(eval, [eval/2, eval_safe/2]).
 :- use_module(builtins).
+:- use_module(environs).
 
 % Marking all special constructs here,
 % e.g. if, define, cond, lambda, ..
@@ -15,14 +16,8 @@ special_term("cond").
 false_condition(nil_lit).
 false_condition(boolean_lit(false)).
 
-env_put(Environ, Name, Value, NewEnviron) :-
-    put_assoc(Name, Environ, Value, NewEnviron).
-env_get(Environ, Name, Value) :-
-    get_assoc(Name, Environ, Value).
-
-
 eval(Term, Result) :-
-    builtins:gen_environ(Environ),
+    gen_environ(Environ),
     eval(Term, Result, Environ), !.
 
 /*

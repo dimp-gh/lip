@@ -1,8 +1,21 @@
-:- module(builtins, [apply/3, gen_environ/1]).
-:- use_module(library(assoc)).
-:- use_module(library(pairs)).
+:- module(builtins, [apply/3, builtin/1]).
 :- use_module(pretty).
 :- use_module(gramma).
+
+builtin(+).
+builtin(-).
+builtin(*).
+builtin(/).
+builtin(=).
+builtin(<).
+builtin(>).
+builtin(print).
+builtin(read).
+builtin(input).
+builtin(list).
+builtin(cons).
+builtin(car).
+builtin(cdr).
 
 % Here i'll declare all built-in-language functions, as '+', '-', 'or', 'and'
 
@@ -75,10 +88,3 @@ apply(builtin(cdr), [list_lit([_ | Rest])], list_lit(Rest)) :-
 repetition(_, []).
 repetition(El, [El | T]) :-
     repetition(El, T).
-
-gen_environ(Environ) :-
-    pairs_keys_values(Pairs,
-		      ["+", "-", "*", "/", "=", "<", ">", "print", "read", "input", "list", "cons", "car", "cdr"],
-		      [builtin(+), builtin(-), builtin(*), builtin(/), builtin(=), builtin(<), builtin(>), builtin(print), builtin(read), builtin(input), builtin(list), builtin(cons), builtin(car), builtin(cdr)]),
-    list_to_assoc(Pairs, Environ).
-    
