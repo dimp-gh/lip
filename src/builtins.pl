@@ -37,6 +37,11 @@ apply(builtin(<), [number_lit(H) | T], boolean_lit(true)) :-
 	   H < Value).
 apply(builtin(<), _, boolean_lit(false)).
 
+apply(builtin(>), [number_lit(H) | T], boolean_lit(true)) :-
+    forall(member(number_lit(Value), T),
+	   H > Value).
+apply(builtin(>), _, boolean_lit(false)).
+
 apply(builtin(print), [X], nil_lit) :-
     pretty:print(X, Repr),
     format("~s\n", [Repr]).
@@ -73,7 +78,7 @@ repetition(El, [El | T]) :-
 
 gen_environ(Environ) :-
     pairs_keys_values(Pairs,
-		      ["+", "-", "*", "/", "=", "<", "print", "read", "input", "list", "cons", "car", "cdr"],
-		      [builtin(+), builtin(-), builtin(*), builtin(/), builtin(=), builtin(<), builtin(print), builtin(read), builtin(input), builtin(list), builtin(cons), builtin(car), builtin(cdr)]),
+		      ["+", "-", "*", "/", "=", "<", ">", "print", "read", "input", "list", "cons", "car", "cdr"],
+		      [builtin(+), builtin(-), builtin(*), builtin(/), builtin(=), builtin(<), builtin(>), builtin(print), builtin(read), builtin(input), builtin(list), builtin(cons), builtin(car), builtin(cdr)]),
     list_to_assoc(Pairs, Environ).
     

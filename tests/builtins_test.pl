@@ -103,4 +103,11 @@ test('(< 3 5 7)') :-
 	   number_lit(7)],
 	  boolean_lit(true)), !.
 
+test('(> 7 5 3)') :-
+    apply(builtin(>),
+	  [number_lit(7),
+	   number_lit(5),
+	   number_lit(3)],
+	  boolean_lit(true)), !.
+
 :- end_tests(builtins).
