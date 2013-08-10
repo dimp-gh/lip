@@ -10,6 +10,7 @@ special_term("block").
 special_term("quote").
 special_term("eval").
 special_term("else").
+special_term("cond").
 
 false_condition(nil_lit).
 false_condition(boolean_lit(false)).
@@ -216,8 +217,8 @@ select_branch([], _, _) :-
 select_branch([sexpression([id("else"), Winner])], Winner, _).
 select_branch([sexpression([Condition, Expr]) | Rest], Winner, Environ) :-
     eval(Condition, Result, Environ),
-    false_condition(Result) ->
-	select_branch(Rest, Winner, Environ) ; Winner = Expr.
+    (false_condition(Result) ->
+	select_branch(Rest, Winner, Environ) ; Winner = Expr).
 
 eval_safe(Term, Result) :-
     catch(eval(Term, Result),

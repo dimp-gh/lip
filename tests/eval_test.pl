@@ -87,4 +87,8 @@ test('cond else') :-
     X = "(cond (#f 0) (#nil 1) (else 2))",
     parse_eval_pretty(X, "2").
 
+test('complex cond') :-
+    X = "(cond ((> 5 0) 5) ((< 5 0) (- 0 5)) ((= 5 0) 0))",
+    parse_eval_pretty(X, "5").
+
 :- end_tests(eval).
