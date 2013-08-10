@@ -44,4 +44,12 @@ test(parse_factorial_funcion) :-
 test(skip_whitespace_while_parsing_sexprs) :-
     parse_repl("   (  whitespace  ,  whitespace     everywhere         )       ", sexpression([id("whitespace"), id(","), id("whitespace"), id("everywhere")])).
 
+test(skip_comments) :-
+    parse_repl("(+ 2 ;some commentary\n  3)",
+	       sexpression([id("+"), number_lit(2), number_lit(3)])).
+
+test(comments_might_be_empty) :-
+    parse_repl("(+ 2 ;\n 3)",
+	       sexpression([id("+"), number_lit(2), number_lit(3)])).
+
 :- end_tests(gramma).

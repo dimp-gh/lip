@@ -10,6 +10,7 @@
 
 % basic building blocks
 space    --> [C], { code_type(C, space) }.
+space    --> comment. % not really pretty, but works
 digit(C) --> [C], { code_type(C, digit) }.
 ascii(C) --> [C], { code_type(C, ascii) }.
 alpha(C) --> [C], { code_type(C, alpha) }.
@@ -21,12 +22,18 @@ nondelim(D) --> [D], {
 		    not(memberchk(D, "{}[]()#'"))
 		}.
 
+non_endline --> [C], { not(code_type(C, newline)) }.
+
+% comments stuff
+comment --> ";", comment_body, "\n".
+comment_body --> [].
+comment_body --> non_endline, comment_body.
+
 % whitespace skipping stuff
 optspace   --> [].
-optspace   --> space, optspace.
-whitespace --> space.
+optspace   --> whitespace.
 whitespace --> space, whitespace.
-
+whitespace --> space.
 
 % Lisp stuff
 sexpr(Content) --> "(", optspace, content(Terms), optspace, ")",
