@@ -22,15 +22,26 @@ print(list_lit(Content), Result) :-
 
 print(id(Name), Name).
 
+print(if(Cond, Then, Else), Result) :-
+    print(Cond, PCond),
+    print(Then, PThen),
+    print(Else, PElse),
+    format_to_chars("(if ~s ~s ~s)", [PCond, PThen, PElse], Result).
+
+print(cond(Branches), Result) :-
+    print_list(Branches, PBranches),
+    format_to_chars("(cond ~s)", [PBranches], Result).
+
 print(lambda(Args, Body), Result) :-
    print(sexpression(Args), PArgs),
    print(Body, PBody),
    format_to_chars("(lambda ~s ~s)", [PArgs, PBody], Result).
 
-print(let(Binding, Expr), Result) :-
-    print(Binding, PBinding),
+print(let(Name, Expr, Body), Result) :-
+    print(Name, PName),
     print(Expr, PExpr),
-    format_to_chars("(let ~s ~s)", [PBinding, PExpr], Result).
+    print(Body, PBody)
+    format_to_chars("(let (~s ~s) ~s)", [PBinding, PExpr, PBody], Result).
 
 print(block(Exprs), Result) :-
     print_list(Exprs, PExprs),
