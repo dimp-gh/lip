@@ -1,8 +1,8 @@
-:- module(lisp, [repl/0, interp/1]).
+:- module(lisp, [repl/0, interp/1, parse_transform/1]).
 :- use_module(gramma).
 :- use_module(eval).
 :- use_module(pretty).
-
+:- use_module(desugar).
 
 read_expr(X) :-
     format(">>> "),
@@ -27,4 +27,14 @@ interp(Filename) :-
     atom_codes(FileAtom, Filename),
     read_file_to_codes(FileAtom, Content, []),
     parse_module(Content, SyntaxTree),
-    eval_safe(SyntaxTree, _), !.
+    eval_safe(SyntaxTree, _).
+
+parse_transform(Filename) :-
+    atom_codes(FileAtom, Filename),
+    read_file_to_codes(FileAtom, Content, []),
+    parse_module(Content, SyntaxTree),
+    format("Parsed module ~w\n", [SyntaxTree]),
+    transform_safe(SyntaxTree, Transformed), !,
+    format("Transformed module ~w\n", [Transformed]),
+    pretty:print(Transformed, Pretty),
+    format("Transformed syntax tree:\n~s\n", [Pretty]).
